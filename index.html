@@ -3,155 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISMC - Dashboard Scadenze Integrale</title>
+    <title>ISMC - Dashboard Professionale Scadenze</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
-        .dataTables_wrapper .dataTables_filter input { border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px; outline: none; }
-        table.dataTable thead th { border-bottom: 2px solid #e2e8f0 !important; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
-        .status-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; rounded: 12px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .dataTables_wrapper .dataTables_filter input { border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px 16px; margin-bottom: 20px; outline: none; width: 300px; }
+        table.dataTable thead th { border-bottom: 2px solid #f1f5f9 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; padding: 15px !important; }
+        .clickable-row { cursor: pointer; transition: all 0.2s; }
+        .clickable-row:hover { background-color: #f8fafc !important; transform: scale(1.002); }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); z-index: 100; backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px; }
+        #modal.active { display: flex; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-900 scroll-smooth">
+<body class="bg-slate-50 text-slate-900 scroll-smooth">
 
-    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
+    <nav class="glass border-b border-slate-200 p-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black tracking-tighter uppercase">ISMC <span class="text-blue-400">Database</span></h1>
-            <div class="space-x-6 text-sm font-medium">
-                <a href="#home" class="hover:text-blue-300 transition">Dashboard</a>
-                <a href="#archivio" class="hover:text-blue-300 border-l border-blue-700 pl-6 transition">Lista Completa (46)</a>
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 h-8 w-8 rounded-lg flex items-center justify-center text-white font-black text-xs">IS</div>
+                <h1 class="text-xl font-extrabold tracking-tighter text-slate-800">SCADENZARIO <span class="text-blue-600">PRO</span></h1>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-sm font-bold text-slate-500">
+                <a href="#home" class="hover:text-blue-600 transition">Dashboard</a>
+                <a href="#archivio" class="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">Lista Completa</a>
             </div>
         </div>
     </nav>
 
     <section id="home" class="max-w-7xl mx-auto py-12 px-6">
-        <div class="mb-10 text-center md:text-left border-b border-slate-200 pb-6">
-            <h2 class="text-4xl font-black text-slate-800 tracking-tight">Scadenze in primo piano</h2>
-            <p class="text-slate-500 mt-2 text-lg">Focus sugli adempimenti di <strong>Marzo</strong> e <strong>Aprile</strong>.</p>
+        <div class="mb-12">
+            <h2 class="text-4xl font-black text-slate-900 leading-tight">Benvenuto nel Portale <br><span class="text-blue-600 italic">Adempimenti Scuole Paritarie</span></h2>
+            <p class="text-slate-500 mt-4 text-lg">Focus sulle scadenze critiche di questo periodo.</p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-red-500">
-                <div class="text-red-500 mb-4"><i class="fas fa-receipt fa-2x"></i></div>
-                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Spese Scolastiche</h3>
-                <p class="text-slate-600 text-sm mb-6">Invio dati all'Agenzia delle Entrate per la precompilata.</p>
-                <div class="bg-red-50 p-4 rounded-xl flex items-center justify-between font-bold text-red-700">
-                    <span class="text-xs uppercase">Scadenza</span>
-                    <span>16 Marzo</span>
-                </div>
+        <div id="featured-cards" class="grid md:grid-cols-3 gap-8">
             </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-orange-500">
-                <div class="text-orange-500 mb-4"><i class="fas fa-school fa-2x"></i></div>
-                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Nuova Parità / Estensione</h3>
-                <p class="text-slate-600 text-sm mb-6">Istanza agli UUSSRR per nuovi corsi o scuole non paritarie.</p>
-                <div class="bg-orange-50 p-4 rounded-xl flex items-center justify-between font-bold text-orange-700">
-                    <span class="text-xs uppercase">Scadenza</span>
-                    <span>31 Marzo</span>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-blue-500">
-                <div class="text-blue-500 mb-4"><i class="fas fa-syringe fa-2x"></i></div>
-                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Anagrafe Vaccinale</h3>
-                <p class="text-slate-600 text-sm mb-6">Invio elenchi iscritti alle ASL competenti.</p>
-                <div class="bg-blue-50 p-4 rounded-xl flex items-center justify-between font-bold text-blue-700">
-                    <span class="text-xs uppercase">Scadenza</span>
-                    <span>10 Marzo</span>
-                </div>
-            </div>
-        </div>
     </section>
 
-    <section id="archivio" class="bg-white py-20 px-6 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter">Calendario Completo (46 Adempimenti)</h2>
-                <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-4 py-2 rounded-full border border-slate-200">DATI AGGIORNATI DA EXCEL</span>
+    <section id="archivio" class="max-w-7xl mx-auto py-20 px-6">
+        <div class="bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden p-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Database Integrale</h3>
+                    <p class="text-slate-400 text-sm font-medium">Tutti i 46 punti del piano di mantenimento parità</p>
+                </div>
             </div>
             
-            <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm p-4">
+            <div class="overflow-x-auto">
                 <table id="fullTable" class="w-full text-left display">
-                    <thead class="bg-slate-50">
+                    <thead>
                         <tr>
                             <th>Periodo</th>
                             <th>Area</th>
                             <th>Adempimento</th>
-                            <th>Destinatari / Ambito</th>
+                            <th>Ambito</th>
                         </tr>
                     </thead>
-                    <tbody class="text-sm divide-y divide-slate-100">
-                        <tr><td>30 Settembre</td><td>Parità</td><td>Rilevazione funzionamento e docenti (SIDI)</td><td>Tutte le scuole paritarie</td></tr>
-                        <tr><td>Settembre/Novembre</td><td>Parità</td><td>Inserimento alunni in Anagrafe Nazionale</td><td>Tutte le scuole paritarie</td></tr>
-                        <tr><td>31 Ottobre</td><td>Offerta Formativa</td><td>Approvazione PTOF</td><td>Tutte le scuole paritarie</td></tr>
-                        <tr><td>31 Ottobre</td><td>Inclusione</td><td>Approvazione PEI Definitivo</td><td>Scuole con alunni disabili</td></tr>
-                        <tr><td>Ottobre/Dicembre</td><td>Inclusione</td><td>Rilevazione alunni disabili USRL</td><td>Lombardia</td></tr>
-                        <tr><td>Novembre</td><td>Valutazione</td><td>Iscrizione Prove INVALSI</td><td>Classi interessate</td></tr>
-                        <tr><td>Dicembre</td><td>Valutazione</td><td>INVALSI: individuazione classi campione</td><td>Classi interessate</td></tr>
-                        <tr><td>Gennaio</td><td>Valutazione</td><td>INVALSI: informazioni di contesto</td><td>Classi interessate</td></tr>
-                        <tr><td>Marzo/Maggio</td><td>Valutazione</td><td>Svolgimento prove INVALSI</td><td>Classi interessate</td></tr>
-                        <tr><td>Novembre/Gennaio</td><td>Rilevazioni</td><td>Rilevazione Dati Generali (ex Integrative)</td><td>Tutte le scuole</td></tr>
-                        <tr><td>Gennaio/Febbraio</td><td>Iscrizioni</td><td>Iscrizioni classi prime / SIDI</td><td>Tutte le scuole paritarie</td></tr>
-                        <tr><td>Febbraio</td><td>Contributi</td><td>Modello A (Attività commerciale)</td><td>Scuole paritarie</td></tr>
-                        <tr><td>Febbraio (Marzo)</td><td>Contributi</td><td>Finanziamento sezioni primavera</td><td>Sezioni primavera</td></tr>
-                        <tr><td>10 Marzo</td><td>Sanitario</td><td>Adempimenti vaccinali (Invio ASL)</td><td>Scuole fino a 16 anni</td></tr>
-                        <tr><td>16 Marzo</td><td>Fiscale</td><td>Spese scolastiche (Agenzia Entrate)</td><td>Statali e Paritarie</td></tr>
-                        <tr><td>16 Marzo</td><td>Fiscale</td><td>Erogazioni liberali (ETS/ONLUS)</td><td>Entrate > 220k €</td></tr>
-                        <tr><td>31 Marzo</td><td>Parità</td><td>Richiesta nuova parità</td><td>Nuove richieste</td></tr>
-                        <tr><td>31 Marzo</td><td>Parità</td><td>Estensione parità nuovi corsi</td><td>Scuole paritarie</td></tr>
-                        <tr><td>31 Marzo</td><td>Primaria</td><td>Nuovo convenzionamento primaria</td><td>Scuola primaria paritaria</td></tr>
-                        <tr><td>31 Marzo (Proxy)</td><td>Primaria</td><td>Modifica convenzionamento (Classi)</td><td>Scuole primarie</td></tr>
-                        <tr><td>30 Settembre</td><td>Primaria</td><td>Modifica convenzionamento (Sostegno)</td><td>Scuole primarie</td></tr>
-                        <tr><td>Entro avvio A.S.</td><td>Primaria</td><td>Mutamento gestore / Sede</td><td>Scuole primarie</td></tr>
-                        <tr><td>31 Marzo</td><td>Non Paritarie</td><td>Iscrizione registro non paritarie</td><td>Scuole non paritarie</td></tr>
-                        <tr><td>31 Marzo (Triennale)</td><td>Non Paritarie</td><td>Mantenimento elenco regionale</td><td>Scuole non paritarie</td></tr>
-                        <tr><td>31 Marzo</td><td>Parità</td><td>Cessazione attività scolastica</td><td>Scuole paritarie</td></tr>
-                        <tr><td>Maggio (10gg)</td><td>Libri di Testo</td><td>Adozione libri di testo</td><td>Scuole interessate</td></tr>
-                        <tr><td>Maggio/Giugno</td><td>Libri di Testo</td><td>Comunicazione AIE</td><td>Scuole interessate</td></tr>
-                        <tr><td>30 Giugno</td><td>Inclusione</td><td>PEI Provvisorio</td><td>Nuovi iscritti/certificati</td></tr>
-                        <tr><td>30 Giugno</td><td>Trasparenza</td><td>Pubblicazione sussidi/contributi PA</td><td>Soggetti obbligati</td></tr>
-                        <tr><td>30 Giugno</td><td>Inclusione</td><td>Piano Annuale Inclusione (PAI)</td><td>Tutte le scuole</td></tr>
-                        <tr><td>10 Luglio</td><td>Organizzazione</td><td>Aumento classi: Infanzia</td><td>Verificare USR</td></tr>
-                        <tr><td>20 Luglio</td><td>Organizzazione</td><td>Aumento classi: Collaterali Iniziali</td><td>Verificare USR</td></tr>
-                        <tr><td>31 Luglio</td><td>Organizzazione</td><td>Aumento classi: Collaterali Terminali</td><td>Verificare USR</td></tr>
-                        <tr><td>20 Luglio / Avvio AS</td><td>Organizzazione</td><td>Sospensione classe</td><td>Verificare USR</td></tr>
-                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Variazione Legale Rappresentante</td><td>SIDI / USR</td></tr>
-                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Variazione Coordinatore</td><td>SIDI / USR</td></tr>
-                        <tr><td>Entro 60 gg</td><td>Variazioni</td><td>Cambio gestione / Natura giuridica</td><td>USR</td></tr>
-                        <tr><td>Preventivamente</td><td>Variazioni</td><td>Trasferimento sede scolastica</td><td>Idoneità locali</td></tr>
-                        <tr><td>Inizio Lavori</td><td>Variazioni</td><td>Modifica edificio scolastico</td><td>Su evento</td></tr>
-                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Coordinate Bancarie / Alunni</td><td>SIDI / AT</td></tr>
-                        <tr><td>Settembre/Ottobre</td><td>Regione</td><td>Dote Merito</td><td>Lombardia</td></tr>
-                        <tr><td>Novembre/Dicembre</td><td>Regione</td><td>Buono Scuola</td><td>Lombardia</td></tr>
-                        <tr><td>Febbraio/Aprile</td><td>Regione</td><td>Repository Contributo Infanzia</td><td>Lombardia</td></tr>
-                        <tr><td>Giugno/Luglio</td><td>Regione</td><td>Dote Disabilità (Dote H)</td><td>Lombardia</td></tr>
-                        <tr><td>10 Luglio</td><td>Sanitario</td><td>Vaccini: raccolta doc. famiglie</td><td>Infanzia/Fino a 16 anni</td></tr>
-                        <tr><td>20 Luglio</td><td>Sanitario</td><td>Vaccini: comunicazione mancati depositi</td><td>ASL</td></tr>
-                    </tbody>
+                    <tbody id="table-body">
+                        </tbody>
                 </table>
             </div>
         </div>
     </section>
 
-    <footer class="bg-slate-900 text-slate-500 py-16 text-center text-xs">
-        <p class="font-bold text-slate-300 mb-2 italic underline uppercase">Monitoraggio Integrale ISMC PRO</p>
-        <p>Database Adempimenti Parità Scolastica - Basato su L. 62/2000</p>
+    <div id="modal">
+        <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-all p-2">
+            <div class="bg-slate-900 p-8 rounded-[2rem] text-white">
+                <div class="flex justify-between items-start mb-6">
+                    <div id="modal-tag" class="bg-blue-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Dettaglio</div>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white transition"><i class="fas fa-times-circle fa-xl"></i></button>
+                </div>
+                <h3 id="modal-title" class="text-3xl font-extrabold mb-4 leading-tight"></h3>
+                <div class="flex gap-4 mb-8">
+                    <div class="bg-white/10 px-4 py-2 rounded-xl border border-white/10 text-xs font-bold">
+                        <i class="far fa-calendar-alt mr-2 text-blue-400"></i><span id="modal-period"></span>
+                    </div>
+                    <div class="bg-white/10 px-4 py-2 rounded-xl border border-white/10 text-xs font-bold">
+                        <i class="far fa-building mr-2 text-blue-400"></i><span id="modal-area"></span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 text-slate-800">
+                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Note Operative</h4>
+                    <p id="modal-notes" class="text-sm leading-relaxed font-medium"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-20 text-center">
+        <p class="text-slate-300 text-[10px] font-black uppercase tracking-[0.3em]">ISMC Professional Dashboard © 2026</p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#fullTable').DataTable({
-                pageLength: 50,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it-IT.json',
-                    search: "Cerca adempimento o area:"
-                },
-                order: [] // Mantiene l'ordine dell'elenco fornito
-            });
-        });
-    </script>
-</body>
-</html>
+        const database = [
+            { id: 1, area: "Parità scolastica", titolo: "Rilevazione funzionamento e rilevazione docenti", note: "Compilazione annuale SIDI per mantenimento requisiti parità e dati docenti.", ambito: "Tutte le scuole paritarie", periodo: "30 settembre" },
+            { id: 2, area: "Parità scolastica", titolo: "Inserimento alunni in Anagrafe Nazionale Studenti", note: "Di norma tra metà settembre e metà novembre; aggiornare anche in caso di ingressi/ritiri/trasferimenti.", ambito: "Tutte le scuole paritarie", periodo: "Settembre/novembre" },
+            { id: 3, area: "Offerta formativa", titolo: "Approvazione PTOF", note: "Il PTOF può essere rivisto annualmente entro il 31 ottobre; spesso prorogato fino all'avvio iscrizioni.", ambito: "Tutte le scuole paritarie", periodo: "31 ottobre" },
+            { id: 4, area: "Inclusione", titolo: "Approvazione PEI", note: "Il PEI definitivo è di norma redatto non oltre ottobre; in casi motivati è possibile deroga.", ambito: "Scuole con alunni con disabilità", periodo: "31 ottobre" },
+            { id: 5, area: "Inclusione", titolo: "USRL: piattaforma rilevazione alunni con disabilità", note: "Rilevazione annuale su piattaforma USR Lombardia; negli altri USR può esserci modulistica dedicata.", ambito: "Lombardia / verificare USR", periodo: "Ottobre/dicembre" },
+            { id: 6, area: "Valutazione", titolo: "Iscrizione Prove INVALSI", note: "Iscrizione degli alunni alle prove INVALSI.", ambito: "Classi interessate", periodo: "Novembre" },
+            { id: 7, area: "Valutazione", titolo: "INVALSI: individuazione classi campione", note: "Scadenza successiva collegata alle prove INVALSI.", ambito: "Classi interessate", periodo: "Dicembre" },
+            { id: 8, area: "Valutazione", titolo: "INVALSI: informazioni di contesto", note: "Inserimento informazioni di contesto richieste da INVALSI.", ambito: "Classi interessate", periodo: "Gennaio" },
+            { id: 9, area: "Valutazione", titolo: "INVALSI: svolgimento prove", note: "Finestra ordinaria di svolgimento prove.", ambito: "Classi interessate", periodo: "Marzo/maggio" },
+            { id: 10, area: "Rilevazioni", titolo: "Rilevazione Dati Generali – Scuole statali e non statali e CPIA", note: "Rilevazione ex Integrative; di norma da metà novembre a metà gennaio.", ambito: "Tutte le scuole / non paritarie con inserimento manuale", periodo: "Novembre/gennaio" },
+            { id: 11, area: "Iscrizioni", titolo: "Iscrizioni alle classi prime / caricamento su SIDI", note: "Scuole paritarie possono ricevere iscrizioni in modalità diretta; poi caricamento su SIDI secondo circolare annuale.", ambito: "Tutte le scuole paritarie", periodo: "Gennaio/febbraio" },
+            { id: 12, area: "Contributi", titolo: "Modello A", note: "Caricamento su SIDI dopo pubblicazione CMS e note USR.", ambito: "Scuole paritarie", periodo: "Febbraio" },
+            { id: 13, area: "Contributi", titolo: "Richieste per finanziamento sezioni primavera", note: "Domanda distinta per ciascuna sezione; necessario nulla osta/parere favorevole del Comune.", ambito: "Sezioni primavera", periodo: "Febbraio (marzo)" },
+            { id: 14, area: "Sanitario", titolo: "Adempimenti vaccinali: invio elenco iscritti alle ASL", note: "Invio elenco iscritti fino a 16 anni e minori stranieri non accompagnati.", ambito: "Scuole fino a 16 anni / infanzia", periodo: "10 marzo" },
+            { id: 15, area: "Fiscale", titolo: "Invio spese scolastiche ed erogazioni liberali all’Agenzia delle Entrate", note: "Invio dati relativi a spese scolastiche, erogazioni liberali e relativi rimborsi.", ambito: "Istituti scolastici statali e paritari", periodo: "16 marzo" },
+            { id: 16, area: "Fiscale", titolo: "Invio erogazioni liberali all’Agenzia delle Entrate (ETS/ODV/APS/ONLUS)", note: "Per enti del terzo settore con entrate > 220.000 euro nell'anno precedente.", ambito: "Solo soggetti obbligati", periodo: "16 marzo" },
+            { id: 17, area: "Parità scolastica", titolo: "Richiesta nuova parità", note: "Da richiedere entro il 31/3 per scuole già funzionanti come non paritarie o con avvio previsto nell'a.s. successivo.", ambito: "Nuove richieste", periodo: "31 marzo" },
+            { id: 18, area: "Parità scolastica", titolo: "Estensione parità a nuovi corsi", note: "Entro 30 giorni dal termine ultimo per le iscrizioni; spesso posticipata al 31/3 secondo USR/AT.", ambito: "Scuole già paritarie con nuovi corsi", periodo: "31 marzo / 30 gg dopo chiusura iscrizioni" },
+            { id: 19, area: "Contributi primaria", titolo: "Nuovo convenzionamento scuola primaria", note: "Domanda di nuova convenzione da inoltrare entro il 31 marzo all'USR o AT.", ambito: "Scuola primaria già paritaria", periodo: "31 marzo" },
+            { id: 20, area: "Contributi primaria", titolo: "Modifica convenzionamento primaria: aumento/diminuzione classi", note: "Entro 30 giorni dopo la chiusura iscrizioni; in molti USR posticipata al 31/3.", ambito: "Scuole primarie convenzionate", periodo: "31 marzo (proxy)" },
+            { id: 21, area: "Contributi primaria", titolo: "Modifica convenzionamento primaria: aumento/diminuzione ore di sostegno", note: "Entro il 30 settembre dell'anno scolastico di riferimento.", ambito: "Scuole primarie convenzionate", periodo: "30 settembre" },
+            { id: 22, area: "Contributi primaria", titolo: "Modifica convenzionamento primaria: mutamento gestore / trasferimento sede", note: "Di norma prima dell'avvio dell'anno scolastico; impostare qui la data effettiva se applicabile.", ambito: "Scuole primarie convenzionate", periodo: "Entro avvio a.s." },
+            { id: 23, area: "Scuole non paritarie", titolo: "Iscrizione al registro delle scuole non paritarie",
