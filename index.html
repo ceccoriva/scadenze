@@ -3,117 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISMC - Dashboard Scadenze</title>
+    <title>ISMC - Dashboard Scadenze Integrale</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <style>
+        .dataTables_wrapper .dataTables_filter input { border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px; outline: none; }
+        table.dataTable thead th { border-bottom: 2px solid #e2e8f0 !important; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+        .status-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; rounded: 12px; }
+    </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900 scroll-smooth">
 
     <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tighter uppercase">ISMC <span class="text-blue-400">Parità</span></h1>
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black tracking-tighter uppercase">ISMC <span class="text-blue-400">Database</span></h1>
             <div class="space-x-6 text-sm font-medium">
-                <a href="#home" class="hover:text-blue-300 transition">Home</a>
-                <a href="#archivio" class="hover:text-blue-300 border-l border-blue-700 pl-6 transition">Calendario Completo</a>
+                <a href="#home" class="hover:text-blue-300 transition">Dashboard</a>
+                <a href="#archivio" class="hover:text-blue-300 border-l border-blue-700 pl-6 transition">Lista Completa (46)</a>
             </div>
         </div>
     </nav>
 
-    <section id="home" class="max-w-6xl mx-auto py-12 px-6">
-        <div class="mb-10 text-center md:text-left">
-            <h2 class="text-4xl font-black text-slate-800">Scadenze in primo piano</h2>
-            <p class="text-slate-500 mt-2 text-lg font-medium">Adempimenti prioritari del periodo corrente.</p>
+    <section id="home" class="max-w-7xl mx-auto py-12 px-6">
+        <div class="mb-10 text-center md:text-left border-b border-slate-200 pb-6">
+            <h2 class="text-4xl font-black text-slate-800 tracking-tight">Scadenze in primo piano</h2>
+            <p class="text-slate-500 mt-2 text-lg">Focus sugli adempimenti di <strong>Marzo</strong> e <strong>Aprile</strong>.</p>
         </div>
         
         <div class="grid md:grid-cols-3 gap-8">
             <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-red-500">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="bg-red-50 p-3 rounded-2xl text-red-500"><i class="fas fa-landmark fa-2x"></i></div>
-                    <span class="bg-red-100 text-red-700 text-xs font-black px-3 py-1 rounded-full uppercase">Fiscale</span>
-                </div>
-                <h3 class="font-extrabold text-2xl mb-2 text-slate-800">Agenzia Entrate</h3>
-                <p class="text-slate-600 text-sm leading-relaxed mb-6">Invio spese scolastiche ed erogazioni liberali ai fini della dichiarazione precompilata.</p>
-                <div class="bg-slate-50 p-4 rounded-xl flex items-center justify-between font-bold">
-                    <span class="text-slate-400 text-xs uppercase">Scadenza</span>
-                    <span class="text-slate-900">16 Marzo</span>
+                <div class="text-red-500 mb-4"><i class="fas fa-receipt fa-2x"></i></div>
+                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Spese Scolastiche</h3>
+                <p class="text-slate-600 text-sm mb-6">Invio dati all'Agenzia delle Entrate per la precompilata.</p>
+                <div class="bg-red-50 p-4 rounded-xl flex items-center justify-between font-bold text-red-700">
+                    <span class="text-xs uppercase">Scadenza</span>
+                    <span>16 Marzo</span>
                 </div>
             </div>
 
             <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-orange-500">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="bg-orange-50 p-3 rounded-2xl text-orange-500"><i class="fas fa-file-contract fa-2x"></i></div>
-                    <span class="bg-orange-100 text-orange-700 text-xs font-black px-3 py-1 rounded-full uppercase">Legale</span>
-                </div>
-                <h3 class="font-extrabold text-2xl mb-2 text-slate-800">USR / Parità</h3>
-                <p class="text-slate-600 text-sm leading-relaxed mb-6">Termine ultimo per la richiesta di nuova parità scolastica o estensione della parità.</p>
-                <div class="bg-slate-50 p-4 rounded-xl flex items-center justify-between font-bold">
-                    <span class="text-slate-400 text-xs uppercase">Scadenza</span>
-                    <span class="text-slate-900">31 Marzo</span>
+                <div class="text-orange-500 mb-4"><i class="fas fa-school fa-2x"></i></div>
+                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Nuova Parità / Estensione</h3>
+                <p class="text-slate-600 text-sm mb-6">Istanza agli UUSSRR per nuovi corsi o scuole non paritarie.</p>
+                <div class="bg-orange-50 p-4 rounded-xl flex items-center justify-between font-bold text-orange-700">
+                    <span class="text-xs uppercase">Scadenza</span>
+                    <span>31 Marzo</span>
                 </div>
             </div>
 
             <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-blue-500">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="bg-blue-50 p-3 rounded-2xl text-blue-500"><i class="fas fa-map-location-dot fa-2x"></i></div>
-                    <span class="bg-blue-100 text-blue-700 text-xs font-black px-3 py-1 rounded-full uppercase">Regione</span>
-                </div>
-                <h3 class="font-extrabold text-2xl mb-2 text-slate-800">Scuole Infanzia</h3>
-                <p class="text-slate-600 text-sm leading-relaxed mb-6">Gestione repository regionale per contributi alle scuole dell'infanzia non comunali.</p>
-                <div class="bg-slate-50 p-4 rounded-xl flex items-center justify-between font-bold">
-                    <span class="text-slate-400 text-xs uppercase">Apertura</span>
-                    <span class="text-slate-900">Febbraio / Aprile</span>
+                <div class="text-blue-500 mb-4"><i class="fas fa-syringe fa-2x"></i></div>
+                <h3 class="font-extrabold text-xl mb-2 text-slate-800">Anagrafe Vaccinale</h3>
+                <p class="text-slate-600 text-sm mb-6">Invio elenchi iscritti alle ASL competenti.</p>
+                <div class="bg-blue-50 p-4 rounded-xl flex items-center justify-between font-bold text-blue-700">
+                    <span class="text-xs uppercase">Scadenza</span>
+                    <span>10 Marzo</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="archivio" class="bg-slate-800 py-20 px-6 mt-12 text-white">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 text-center md:text-left">
-                <div>
-                    <h2 class="text-3xl font-black italic uppercase tracking-tighter">Calendario Completo Adempimenti</h2>
-                    <p class="text-slate-400 mt-1">Lista integrale estratta dal piano di mantenimento parità.</p>
-                </div>
-                <div class="text-slate-500 text-xs font-mono bg-slate-700/50 px-4 py-2 rounded-lg">A.S. 2025/2026</div>
+    <section id="archivio" class="bg-white py-20 px-6 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter">Calendario Completo (46 Adempimenti)</h2>
+                <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-4 py-2 rounded-full border border-slate-200">DATI AGGIORNATI DA EXCEL</span>
             </div>
             
-            <div class="bg-white text-slate-900 rounded-3xl overflow-hidden shadow-2xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100 border-b-2 border-slate-200">
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Scadenza / Periodo</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Ente / Area</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Adempimento</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Stato AS25/26</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 font-medium">
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">30 Settembre</td><td class="p-5 text-sm text-slate-500">Ministero</td><td class="p-5">Rilevazione funzionamento e docenti (SIDI)</td><td class="p-5 text-right"><span class="bg-slate-100 text-slate-400 px-3 py-1 rounded-full text-[10px] font-bold">CONCLUSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">31 Ottobre</td><td class="p-5 text-sm text-slate-500">Didattica</td><td class="p-5">Approvazione PTOF e Approvazione PEI</td><td class="p-5 text-right"><span class="bg-slate-100 text-slate-400 px-3 py-1 rounded-full text-[10px] font-bold">CONCLUSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Novembre</td><td class="p-5 text-sm text-slate-500">INVALSI</td><td class="p-5">Iscrizione Prove Nazionali</td><td class="p-5 text-right"><span class="bg-slate-100 text-slate-400 px-3 py-1 rounded-full text-[10px] font-bold">CONCLUSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Nov / Gennaio</td><td class="p-5 text-sm text-slate-500">Statistica</td><td class="p-5">Rilevazione Dati Generali (Scuole statali e non)</td><td class="p-5 text-right"><span class="bg-slate-100 text-slate-400 px-3 py-1 rounded-full text-[10px] font-bold">CONCLUSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Gen / Febbraio</td><td class="p-5 text-sm text-slate-500">Segreteria</td><td class="p-5">Iscrizioni classi prime (Online/Dirette)</td><td class="p-5 text-right"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold">IN CORSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Febbraio</td><td class="p-5 text-sm text-slate-500">Amministrazione</td><td class="p-5">Modello A (Verifica attività commerciale)</td><td class="p-5 text-right"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold">IN CORSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">10 Marzo</td><td class="p-5 text-sm text-slate-500">Salute</td><td class="p-5">Adempimenti vaccinali (Elenchi ASL/Regione)</td><td class="p-5 text-right"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold">IN CORSO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5 font-bold text-red-600">16 Marzo</td><td class="p-5 text-sm text-slate-500 text-red-600 font-bold">Fiscale</td><td class="p-5 font-bold">Invio Spese Scolastiche (Agenzia Entrate)</td><td class="p-5 text-right"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold italic underline">URGENTE</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5 font-bold text-orange-600">31 Marzo</td><td class="p-5 text-sm text-slate-500 text-orange-600 font-bold">Legale</td><td class="p-5 font-bold">Richiesta Nuova Parità Scolastica (USR)</td><td class="p-5 text-right"><span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[10px] font-bold">IMPORTANTE</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Aprile</td><td class="p-5 text-sm text-slate-500">Regione</td><td class="p-5">Repository Contributo Infanzia (Lombardia)</td><td class="p-5 text-right"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold">PIANIFICATO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Maggio</td><td class="p-5 text-sm text-slate-500">Regione</td><td class="p-5">Dote Scuola (Disabilità / Dote H)</td><td class="p-5 text-right"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold">PIANIFICATO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">30 Giugno</td><td class="p-5 text-sm text-slate-500">Inclusione</td><td class="p-5">Redazione PEI Provvisorio e PAI</td><td class="p-5 text-right"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold">PIANIFICATO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5">Luglio</td><td class="p-5 text-sm text-slate-500">USR</td><td class="p-5">Comunicazione Variazioni (Classi/Personale)</td><td class="p-5 text-right"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold">PIANIFICATO</span></td></tr>
-                            <tr class="hover:bg-slate-50 transition"><td class="p-5 italic text-slate-400">Tempestiva</td><td class="p-5 text-sm text-slate-500">Banca / SIDI</td><td class="p-5 italic">Notifica cambio coordinate bancarie</td><td class="p-5 text-right"><span class="bg-slate-100 text-slate-400 px-3 py-1 rounded-full text-[10px] font-bold">SU EVENTO</span></td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm p-4">
+                <table id="fullTable" class="w-full text-left display">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Area</th>
+                            <th>Adempimento</th>
+                            <th>Destinatari / Ambito</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-100">
+                        <tr><td>30 Settembre</td><td>Parità</td><td>Rilevazione funzionamento e docenti (SIDI)</td><td>Tutte le scuole paritarie</td></tr>
+                        <tr><td>Settembre/Novembre</td><td>Parità</td><td>Inserimento alunni in Anagrafe Nazionale</td><td>Tutte le scuole paritarie</td></tr>
+                        <tr><td>31 Ottobre</td><td>Offerta Formativa</td><td>Approvazione PTOF</td><td>Tutte le scuole paritarie</td></tr>
+                        <tr><td>31 Ottobre</td><td>Inclusione</td><td>Approvazione PEI Definitivo</td><td>Scuole con alunni disabili</td></tr>
+                        <tr><td>Ottobre/Dicembre</td><td>Inclusione</td><td>Rilevazione alunni disabili USRL</td><td>Lombardia</td></tr>
+                        <tr><td>Novembre</td><td>Valutazione</td><td>Iscrizione Prove INVALSI</td><td>Classi interessate</td></tr>
+                        <tr><td>Dicembre</td><td>Valutazione</td><td>INVALSI: individuazione classi campione</td><td>Classi interessate</td></tr>
+                        <tr><td>Gennaio</td><td>Valutazione</td><td>INVALSI: informazioni di contesto</td><td>Classi interessate</td></tr>
+                        <tr><td>Marzo/Maggio</td><td>Valutazione</td><td>Svolgimento prove INVALSI</td><td>Classi interessate</td></tr>
+                        <tr><td>Novembre/Gennaio</td><td>Rilevazioni</td><td>Rilevazione Dati Generali (ex Integrative)</td><td>Tutte le scuole</td></tr>
+                        <tr><td>Gennaio/Febbraio</td><td>Iscrizioni</td><td>Iscrizioni classi prime / SIDI</td><td>Tutte le scuole paritarie</td></tr>
+                        <tr><td>Febbraio</td><td>Contributi</td><td>Modello A (Attività commerciale)</td><td>Scuole paritarie</td></tr>
+                        <tr><td>Febbraio (Marzo)</td><td>Contributi</td><td>Finanziamento sezioni primavera</td><td>Sezioni primavera</td></tr>
+                        <tr><td>10 Marzo</td><td>Sanitario</td><td>Adempimenti vaccinali (Invio ASL)</td><td>Scuole fino a 16 anni</td></tr>
+                        <tr><td>16 Marzo</td><td>Fiscale</td><td>Spese scolastiche (Agenzia Entrate)</td><td>Statali e Paritarie</td></tr>
+                        <tr><td>16 Marzo</td><td>Fiscale</td><td>Erogazioni liberali (ETS/ONLUS)</td><td>Entrate > 220k €</td></tr>
+                        <tr><td>31 Marzo</td><td>Parità</td><td>Richiesta nuova parità</td><td>Nuove richieste</td></tr>
+                        <tr><td>31 Marzo</td><td>Parità</td><td>Estensione parità nuovi corsi</td><td>Scuole paritarie</td></tr>
+                        <tr><td>31 Marzo</td><td>Primaria</td><td>Nuovo convenzionamento primaria</td><td>Scuola primaria paritaria</td></tr>
+                        <tr><td>31 Marzo (Proxy)</td><td>Primaria</td><td>Modifica convenzionamento (Classi)</td><td>Scuole primarie</td></tr>
+                        <tr><td>30 Settembre</td><td>Primaria</td><td>Modifica convenzionamento (Sostegno)</td><td>Scuole primarie</td></tr>
+                        <tr><td>Entro avvio A.S.</td><td>Primaria</td><td>Mutamento gestore / Sede</td><td>Scuole primarie</td></tr>
+                        <tr><td>31 Marzo</td><td>Non Paritarie</td><td>Iscrizione registro non paritarie</td><td>Scuole non paritarie</td></tr>
+                        <tr><td>31 Marzo (Triennale)</td><td>Non Paritarie</td><td>Mantenimento elenco regionale</td><td>Scuole non paritarie</td></tr>
+                        <tr><td>31 Marzo</td><td>Parità</td><td>Cessazione attività scolastica</td><td>Scuole paritarie</td></tr>
+                        <tr><td>Maggio (10gg)</td><td>Libri di Testo</td><td>Adozione libri di testo</td><td>Scuole interessate</td></tr>
+                        <tr><td>Maggio/Giugno</td><td>Libri di Testo</td><td>Comunicazione AIE</td><td>Scuole interessate</td></tr>
+                        <tr><td>30 Giugno</td><td>Inclusione</td><td>PEI Provvisorio</td><td>Nuovi iscritti/certificati</td></tr>
+                        <tr><td>30 Giugno</td><td>Trasparenza</td><td>Pubblicazione sussidi/contributi PA</td><td>Soggetti obbligati</td></tr>
+                        <tr><td>30 Giugno</td><td>Inclusione</td><td>Piano Annuale Inclusione (PAI)</td><td>Tutte le scuole</td></tr>
+                        <tr><td>10 Luglio</td><td>Organizzazione</td><td>Aumento classi: Infanzia</td><td>Verificare USR</td></tr>
+                        <tr><td>20 Luglio</td><td>Organizzazione</td><td>Aumento classi: Collaterali Iniziali</td><td>Verificare USR</td></tr>
+                        <tr><td>31 Luglio</td><td>Organizzazione</td><td>Aumento classi: Collaterali Terminali</td><td>Verificare USR</td></tr>
+                        <tr><td>20 Luglio / Avvio AS</td><td>Organizzazione</td><td>Sospensione classe</td><td>Verificare USR</td></tr>
+                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Variazione Legale Rappresentante</td><td>SIDI / USR</td></tr>
+                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Variazione Coordinatore</td><td>SIDI / USR</td></tr>
+                        <tr><td>Entro 60 gg</td><td>Variazioni</td><td>Cambio gestione / Natura giuridica</td><td>USR</td></tr>
+                        <tr><td>Preventivamente</td><td>Variazioni</td><td>Trasferimento sede scolastica</td><td>Idoneità locali</td></tr>
+                        <tr><td>Inizio Lavori</td><td>Variazioni</td><td>Modifica edificio scolastico</td><td>Su evento</td></tr>
+                        <tr><td>Tempestivamente</td><td>Variazioni</td><td>Coordinate Bancarie / Alunni</td><td>SIDI / AT</td></tr>
+                        <tr><td>Settembre/Ottobre</td><td>Regione</td><td>Dote Merito</td><td>Lombardia</td></tr>
+                        <tr><td>Novembre/Dicembre</td><td>Regione</td><td>Buono Scuola</td><td>Lombardia</td></tr>
+                        <tr><td>Febbraio/Aprile</td><td>Regione</td><td>Repository Contributo Infanzia</td><td>Lombardia</td></tr>
+                        <tr><td>Giugno/Luglio</td><td>Regione</td><td>Dote Disabilità (Dote H)</td><td>Lombardia</td></tr>
+                        <tr><td>10 Luglio</td><td>Sanitario</td><td>Vaccini: raccolta doc. famiglie</td><td>Infanzia/Fino a 16 anni</td></tr>
+                        <tr><td>20 Luglio</td><td>Sanitario</td><td>Vaccini: comunicazione mancati depositi</td><td>ASL</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 
     <footer class="bg-slate-900 text-slate-500 py-16 text-center text-xs">
-        <p class="font-bold text-slate-300">ISMC PRO - Dashboard Scadenze</p>
-        <p class="mt-2">Monitoraggio Adempimenti Parità Scolastica L. 62/2000</p>
+        <p class="font-bold text-slate-300 mb-2 italic underline uppercase">Monitoraggio Integrale ISMC PRO</p>
+        <p>Database Adempimenti Parità Scolastica - Basato su L. 62/2000</p>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#fullTable').DataTable({
+                pageLength: 50,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it-IT.json',
+                    search: "Cerca adempimento o area:"
+                },
+                order: [] // Mantiene l'ordine dell'elenco fornito
+            });
+        });
+    </script>
 </body>
 </html>
