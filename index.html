@@ -37,11 +37,12 @@
         </div>
 
         <div class="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden p-8">
-            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Calendario Generale Scadenze</h3>
+            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Calendario Generale Scadenze (46 voci)</h3>
             <table id="fullTable" class="w-full text-left display">
                 <thead>
                     <tr>
-                        <th class="hidden">Ordine</th> <th>Scadenza / Periodo</th>
+                        <th class="hidden">Ordine</th>
+                        <th>Scadenza / Periodo</th>
                         <th>Ente / Area</th>
                         <th>Adempimento</th>
                         <th>Ambito</th>
@@ -56,7 +57,7 @@
         <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden">
             <div class="bg-slate-900 p-8 text-white">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="bg-blue-500 text-[10px] font-black px-3 py-1 rounded-full uppercase">Dettaglio</span>
+                    <span class="bg-blue-500 text-[10px] font-black px-3 py-1 rounded-full uppercase">Dettaglio Operativo</span>
                     <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times-circle fa-xl"></i></button>
                 </div>
                 <h3 id="modal-title" class="text-2xl font-black mb-4 leading-tight"></h3>
@@ -75,28 +76,53 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-        // Database completo con valore 'ordine' per cronologia corretta
         const database = [
-            { id: 1, ordine: 10930, area: "Parità scolastica", titolo: "Rilevazione funzionamento e docenti", periodo: "30 Settembre", mese: 9, note: "Compilazione annuale SIDI per mantenimento requisiti parità e dati docenti.", ambito: "Tutte le scuole paritarie" },
-            { id: 2, ordine: 10901, area: "Parità scolastica", titolo: "Anagrafe Nazionale Studenti", periodo: "Settembre/Novembre", mese: 9, note: "Inserimento e aggiornamento in ANS tra metà settembre e metà novembre.", ambito: "Tutte le scuole paritarie" },
-            { id: 3, ordine: 11031, area: "Offerta formativa", titolo: "Approvazione PTOF", periodo: "31 Ottobre", mese: 10, note: "Revisione annuale PTOF entro il 31 ottobre.", ambito: "Tutte le scuole paritarie" },
-            { id: 4, ordine: 11031, area: "Inclusione", titolo: "Approvazione PEI", periodo: "31 Ottobre", mese: 10, note: "Redazione PEI definitivo non oltre ottobre.", ambito: "Scuole con alunni con disabilità" },
-            { id: 5, ordine: 11001, area: "Inclusione", titolo: "USR: Piattaforma Disabilità", periodo: "Ottobre/Dicembre", mese: 10, note: "Rilevazione annuale su piattaforma USR Lombardia.", ambito: "Lombardia" },
-            { id: 6, ordine: 11101, area: "Valutazione", titolo: "Iscrizione Prove INVALSI", periodo: "Novembre", mese: 11, note: "Iscrizione alunni alle prove nazionali.", ambito: "Classi interessate" },
-            { id: 10, ordine: 11115, area: "Rilevazioni", titolo: "Rilevazione Dati Generali", periodo: "Novembre/Gennaio", mese: 11, note: "Rilevazione ex Integrative su portale SIDI.", ambito: "Tutte le scuole" },
-            { id: 11, ordine: 20101, area: "Iscrizioni", titolo: "Iscrizioni classi prime", periodo: "Gennaio/Febbraio", mese: 1, note: "Iscrizioni dirette o SIDI secondo circolare annuale.", ambito: "Tutte le scuole paritarie" },
-            { id: 14, ordine: 20310, area: "Sanitario", titolo: "Adempimenti vaccinali (ASL)", periodo: "10 Marzo", mese: 3, note: "Invio elenchi iscritti alle ASL competenti.", ambito: "Scuole fino a 16 anni" },
-            { id: 15, ordine: 20316, area: "Fiscale", titolo: "Invio Spese Scolastiche", periodo: "16 Marzo", mese: 3, note: "Invio dati Agenzia Entrate per precompilata.", ambito: "Tutte le scuole" },
-            { id: 17, ordine: 20331, area: "Parità scolastica", titolo: "Richiesta Nuova Parità", periodo: "31 Marzo", mese: 3, note: "Istanza entro il 31/03 per l'a.s. successivo.", ambito: "Nuove richieste" },
-            { id: 23, ordine: 20331, area: "Non paritarie", titolo: "Iscrizione Registro Regionale", periodo: "31 Marzo", mese: 3, note: "Istanza per scuole non paritarie.", ambito: "Solo scuole non paritarie" },
-            { id: 43, ordine: 20401, area: "Regione Lombardia", titolo: "Contributo Infanzia", periodo: "Aprile", mese: 4, note: "Repository regionale contributi infanzia.", ambito: "Solo Lombardia" },
-            { id: 26, ordine: 20510, area: "Libri di testo", titolo: "Adozione Libri", periodo: "Maggio (10gg)", mese: 5, note: "Delibere collegiali per adozioni libri.", ambito: "Scuole interessate" },
-            { id: 28, ordine: 20630, area: "Inclusione", titolo: "PEI Provvisorio", periodo: "30 Giugno", mese: 6, note: "Redazione per nuovi iscritti o certificazioni.", ambito: "Alunni con disabilità" },
-            { id: 29, ordine: 20630, area: "Trasparenza", titolo: "Pubblicazione Contributi PA", periodo: "30 Giugno", mese: 6, note: "Pubblicazione sovvenzioni ricevute anno precedente.", ambito: "Soggetti obbligati" },
-            { id: 31, ordine: 20710, area: "Organizzazione", titolo: "Variazioni Classi Infanzia", periodo: "10 Luglio", mese: 7, note: "Comunicazione USR aumento/sdoppiamento.", ambito: "Verificare USR" },
-            { id: 45, ordine: 20710, area: "Sanitario", titolo: "Vaccini: Raccolta Doc.", periodo: "10 Luglio", mese: 7, note: "Termine per deposito doc. vaccinale famiglie.", ambito: "Infanzia" },
-            { id: 35, ordine: 99999, area: "Variazioni", titolo: "Variazione Legale Rappresentante", periodo: "Su evento", mese: 13, note: "Comunicazione tempestiva SIDI/USR.", ambito: "Tempestivo" }
-            // Nota: Ho riassunto qui per il codice, ma nel JS sotto verranno mostrati tutti.
+            { id: 1, ordine: 10930, area: "Parità scolastica", titolo: "Rilevazione funzionamento e rilevazione docenti", periodo: "30 settembre", mese: 9, note: "Compilazione annuale SIDI per mantenimento requisiti parità e dati docenti.", ambito: "Tutte le scuole paritarie" },
+            { id: 2, ordine: 10901, area: "Parità scolastica", titolo: "Inserimento alunni in Anagrafe Nazionale Studenti", periodo: "Settembre/novembre", mese: 9, note: "Di norma tra metà settembre e metà novembre; aggiornare anche in caso di ingressi/ritiri/trasferimenti.", ambito: "Tutte le scuole paritarie" },
+            { id: 3, ordine: 11031, area: "Offerta formativa", titolo: "Approvazione PTOF", periodo: "31 ottobre", mese: 10, note: "Il PTOF può essere rivisto annualmente entro il 31 ottobre; spesso prorogato fino all'avvio iscrizioni.", ambito: "Tutte le scuole paritarie" },
+            { id: 4, ordine: 11031, area: "Inclusione", titolo: "Approvazione PEI", periodo: "31 ottobre", mese: 10, note: "Il PEI definitivo è di norma redatto non oltre ottobre; in casi motivati è possibile deroga.", ambito: "Scuole con alunni con disabilità" },
+            { id: 5, ordine: 11001, area: "Inclusione", titolo: "USRL: piattaforma rilevazione alunni con disabilità", periodo: "Ottobre/dicembre", mese: 10, note: "Rilevazione annuale su piattaforma USR Lombardia; negli altri USR può esserci modulistica dedicata.", ambito: "Lombardia / verificare USR" },
+            { id: 6, ordine: 11101, area: "Valutazione", titolo: "Iscrizione Prove INVALSI", periodo: "Novembre", mese: 11, note: "Iscrizione degli alunni alle prove INVALSI.", ambito: "Classi interessate" },
+            { id: 7, ordine: 11201, area: "Valutazione", titolo: "INVALSI: individuazione classi campione", periodo: "Dicembre", mese: 12, note: "Scadenza successiva collegata alle prove INVALSI.", ambito: "Classi interessate" },
+            { id: 8, ordine: 20101, area: "Valutazione", titolo: "INVALSI: informazioni di contesto", periodo: "Gennaio", mese: 1, note: "Inserimento informazioni di contesto richieste da INVALSI.", ambito: "Classi interessate" },
+            { id: 9, ordine: 20301, area: "Valutazione", titolo: "INVALSI: svolgimento prove", periodo: "Marzo/maggio", mese: 3, note: "Finestra ordinaria di svolgimento prove.", ambito: "Classi interessate" },
+            { id: 10, ordine: 11115, area: "Rilevazioni", titolo: "Rilevazione Dati Generali", periodo: "Novembre/gennaio", mese: 11, note: "Rilevazione ex Integrative; di norma da metà novembre a metà gennaio.", ambito: "Tutte le scuole" },
+            { id: 11, ordine: 20115, area: "Iscrizioni", titolo: "Iscrizioni alle classi prime", periodo: "Gennaio/febbraio", mese: 1, note: "Caricamento su SIDI secondo circolare annuale.", ambito: "Tutte le scuole paritarie" },
+            { id: 12, ordine: 20201, area: "Contributi", titolo: "Modello A", periodo: "Febbraio", mese: 2, note: "Caricamento su SIDI dopo pubblicazione CMS e note USR.", ambito: "Scuole paritarie" },
+            { id: 13, ordine: 20215, area: "Contributi", titolo: "Finanziamento sezioni primavera", periodo: "Febbraio (marzo)", mese: 2, note: "Domanda distinta per ciascuna sezione; necessario nulla osta Comune.", ambito: "Sezioni primavera" },
+            { id: 14, ordine: 20310, area: "Sanitario", titolo: "Adempimenti vaccinali: invio ASL", periodo: "10 marzo", mese: 3, note: "Invio elenco iscritti fino a 16 anni e minori stranieri.", ambito: "Scuole fino a 16 anni" },
+            { id: 15, ordine: 20316, area: "Fiscale", titolo: "Invio spese scolastiche Agenzia Entrate", periodo: "16 marzo", mese: 3, note: "Invio dati relativi a spese scolastiche ed erogazioni liberali.", ambito: "Istituti statali e paritari" },
+            { id: 16, ordine: 20316, area: "Fiscale", titolo: "Invio erogazioni liberali (ETS/ONLUS)", periodo: "16 marzo", mese: 3, note: "Per enti terzo settore con entrate > 220.000 euro.", ambito: "Solo soggetti obbligati" },
+            { id: 17, ordine: 20331, area: "Parità scolastica", titolo: "Richiesta nuova parità", periodo: "31 marzo", mese: 3, note: "Da richiedere entro il 31/3 per l'a.s. successivo.", ambito: "Nuove richieste" },
+            { id: 18, ordine: 20331, area: "Parità scolastica", titolo: "Estensione parità nuovi corsi", periodo: "31 marzo", mese: 3, note: "Entro 30 giorni dal termine ultimo iscrizioni.", ambito: "Scuole già paritarie" },
+            { id: 19, ordine: 20331, area: "Contributi primaria", titolo: "Nuovo convenzionamento primaria", periodo: "31 marzo", mese: 3, note: "Domanda di nuova convenzione da inoltrare all'USR o AT.", ambito: "Scuola primaria paritaria" },
+            { id: 20, ordine: 20331, area: "Contributi primaria", titolo: "Modifica convenzionamento: classi", periodo: "31 marzo (proxy)", mese: 3, note: "Entro 30 giorni dopo chiusura iscrizioni.", ambito: "Scuole primarie" },
+            { id: 21, ordine: 10930, area: "Contributi primaria", titolo: "Modifica convenzionamento: sostegno", periodo: "30 settembre", mese: 9, note: "Entro il 30 settembre dell'anno scolastico di riferimento.", ambito: "Scuole primarie" },
+            { id: 22, ordine: 10901, area: "Contributi primaria", titolo: "Mutamento gestore / sede", periodo: "Entro avvio a.s.", mese: 9, note: "Di norma prima dell'avvio dell'anno scolastico.", ambito: "Scuole primarie" },
+            { id: 23, ordine: 20331, area: "Scuole non paritarie", titolo: "Iscrizione registro non paritarie", periodo: "31 marzo", mese: 3, note: "Istanza da presentare agli UUSSRR.", ambito: "Solo scuole non paritarie" },
+            { id: 24, ordine: 20331, area: "Scuole non paritarie", titolo: "Mantenimento elenco regionale", periodo: "31 marzo (triennale)", mese: 3, note: "Scadenza triennale successiva alla prima iscrizione.", ambito: "Solo scuole non paritarie" },
+            { id: 25, ordine: 20331, area: "Parità scolastica", titolo: "Cessazione attività scolastica", periodo: "31 marzo", mese: 3, note: "Comunicazione entro il 31 marzo per l'anno successivo.", ambito: "Scuole paritarie" },
+            { id: 26, ordine: 20510, area: "Libri di testo", titolo: "Adozione libri di testo", periodo: "Entro 10 maggio", mese: 5, note: "Entro la prima decade del mese di maggio.", ambito: "Scuole interessate" },
+            { id: 27, ordine: 20520, area: "Libri di testo", titolo: "Comunicazione AIE", periodo: "Maggio/giugno", mese: 5, note: "Successiva comunicazione all'AIE.", ambito: "Scuole interessate" },
+            { id: 28, ordine: 20630, area: "Inclusione", titolo: "PEI provvisorio", periodo: "30 giugno", mese: 6, note: "Per alunni con nuova certificazione o prima iscrizione.", ambito: "Scuole con alunni disabili" },
+            { id: 29, ordine: 20630, area: "Trasparenza", titolo: "Pubblicazione contributi PA", periodo: "30 giugno", mese: 6, note: "Pubblicazione sovvenzioni ricevute nell'esercizio precedente.", ambito: "Soggetti obbligati" },
+            { id: 30, ordine: 20630, area: "Inclusione", titolo: "Piano annuale inclusione (PAI)", periodo: "30 giugno", mese: 6, note: "Documento BES/strategie inclusive; aggiornamento entro giugno.", ambito: "Tutte le scuole" },
+            { id: 31, ordine: 20710, area: "Organizzazione", titolo: "Aumento classi: infanzia", periodo: "10 luglio", mese: 7, note: "Esempio USRL: entro 10 luglio; verificare USR.", ambito: "Verificare USR" },
+            { id: 32, ordine: 20720, area: "Organizzazione", titolo: "Aumento classi: iniziali/intermedie", periodo: "20 luglio", mese: 7, note: "Esempio USRL: entro 20 luglio; verificare USR.", ambito: "Verificare USR" },
+            { id: 33, ordine: 20731, area: "Organizzazione", titolo: "Aumento classi: terminali", periodo: "31 luglio", mese: 7, note: "Esempio USRL: entro 31 luglio; verificare USR.", ambito: "Verificare USR" },
+            { id: 34, ordine: 20720, area: "Organizzazione", titolo: "Sospensione classe", periodo: "20 luglio / avvio a.s.", mese: 7, note: "Entro 20 luglio o avvio a.s. per motivi sopraggiunti.", ambito: "Verificare USR" },
+            { id: 35, ordine: 99999, area: "Variazioni", titolo: "Variazione Legale Rappresentante", periodo: "Tempestivamente", mese: 13, note: "Comunicazione tempestiva e aggiornamento SIDI.", ambito: "Su evento" },
+            { id: 36, ordine: 99999, area: "Variazioni", titolo: "Variazione Coordinatore", periodo: "Tempestivamente", mese: 13, note: "Comunicazione tempestiva e aggiornamento SIDI.", ambito: "Su evento" },
+            { id: 37, ordine: 99999, area: "Variazioni", titolo: "Cambio gestione / natura giuridica", periodo: "Tempestivamente", mese: 13, note: "USR Lombardia indica max 60 giorni.", ambito: "Su evento" },
+            { id: 38, ordine: 99999, area: "Variazioni", titolo: "Trasferimento sede", periodo: "Preventivamente", mese: 13, note: "Richiesta preventiva con verifica idoneità locali.", ambito: "Su evento" },
+            { id: 39, ordine: 99999, area: "Variazioni", titolo: "Modifica edificio", periodo: "Contestuale lavori", mese: 13, note: "Comunicazione inizio e fine lavori.", ambito: "Su evento" },
+            { id: 40, ordine: 99999, area: "Variazioni", titolo: "Altre variazioni (coordinate bancarie)", periodo: "Tempestivamente", mese: 13, note: "Notifica agli Ambiti Territoriali e aggiornamento SIDI.", ambito: "Su evento" },
+            { id: 41, ordine: 10915, area: "Regione Lombardia", titolo: "Dote merito", periodo: "Settembre/ottobre", mese: 9, note: "Bando sistema Dote Scuola.", ambito: "Solo Lombardia" },
+            { id: 42, ordine: 11115, area: "Regione Lombardia", titolo: "Buono scuola", periodo: "Novembre/dicembre", mese: 11, note: "Bando sistema Dote Scuola.", ambito: "Solo Lombardia" },
+            { id: 43, ordine: 20215, area: "Regione Lombardia", titolo: "Repository contributo infanzia", periodo: "Febbraio/aprile", mese: 2, note: "Finestra regionale dedicata contributi infanzia.", ambito: "Solo Lombardia" },
+            { id: 44, ordine: 20615, area: "Regione Lombardia", titolo: "Dote disabilità (Dote H)", periodo: "Giugno/luglio", mese: 6, note: "Finestra regionale dedicata alla dote disabilità.", ambito: "Solo Lombardia" },
+            { id: 45, ordine: 20710, area: "Sanitario", titolo: "Vaccini: raccolta doc. famiglie", periodo: "10 luglio", mese: 7, note: "Deposito documentazione vaccinale entro il 10 luglio.", ambito: "Infanzia / fino a 16 anni" },
+            { id: 46, ordine: 20720, area: "Sanitario", titolo: "Vaccini: comunicazione mancati depositi", periodo: "20 luglio", mese: 7, note: "Trasmissione alle ASL dei mancati depositi.", ambito: "Infanzia / fino a 16 anni" }
         ];
 
         function showDetail(id) {
@@ -117,7 +143,6 @@
             const meseCorrente = oggi.getMonth() + 1;
             $('#current-date').text(oggi.toLocaleDateString('it-IT', {day:'numeric', month:'long', year:'numeric'}));
 
-            // Popola Tabella
             let html = '';
             database.forEach(s => {
                 html += `<tr class="clickable-row" onclick="showDetail(${s.id})">
@@ -130,7 +155,7 @@
             });
             $('#table-body').html(html);
 
-            // Dashboard Intelligente (Prossime 3)
+            // Dashboard: Prossime 3 scadenze (escluse quelle passate e quelle "su evento")
             const prossime = database
                 .filter(x => x.mese >= meseCorrente && x.mese <= 12)
                 .sort((a,b) => a.ordine - b.ordine)
@@ -140,13 +165,12 @@
             prossime.forEach(s => {
                 cards += `<div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100 cursor-pointer hover:shadow-lg transition" onclick="showDetail(${s.id})">
                     <div class="text-blue-600 mb-3"><i class="fas fa-calendar-alt fa-lg"></i></div>
-                    <h4 class="font-bold text-slate-800 mb-1">${s.titolo}</h4>
-                    <p class="text-blue-600 font-black text-xs uppercase tracking-widest">${s.periodo}</p>
+                    <h4 class="font-bold text-slate-800 mb-1 text-sm">${s.titolo}</h4>
+                    <p class="text-blue-600 font-black text-[10px] uppercase tracking-widest">${s.periodo}</p>
                 </div>`;
             });
             $('#featured-cards').html(cards);
 
-            // Inizializza DataTable con ordinamento sulla colonna nascosta 0
             $('#fullTable').DataTable({
                 pageLength: 50,
                 order: [[0, 'asc']],
