@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISMC - Registro Integrale Adempimenti</title>
+    <title>ISMC - Registro Adempimenti</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .dataTables_wrapper .dataTables_filter input { border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px 16px; margin-bottom: 20px; outline: none; width: 300px; }
-        .clickable-row { cursor: pointer; transition: background 0.2s; }
+        .dataTables_wrapper .dataTables_filter { display: none; }
+        .filter-btn.active { background-color: #1e40af; color: white; border-color: #1e40af; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .clickable-row { cursor: pointer; transition: all 0.2s; }
         .clickable-row:hover { background-color: #f1f5f9 !important; }
-        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 100; backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 100; backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px; }
         #modal.active { display: flex; }
     </style>
 </head>
@@ -22,26 +23,50 @@
     <nav class="bg-white border-b border-slate-200 p-4 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-blue-600 h-8 w-8 rounded-lg flex items-center justify-center text-white font-black text-xs">IS</div>
-                <h1 class="text-xl font-black tracking-tighter uppercase text-slate-800">ISMC <span class="text-blue-600">Sync</span></h1>
+                <div class="bg-blue-600 h-8 w-8 rounded-lg flex items-center justify-center text-white font-black text-xs shadow-lg">IS</div>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-slate-800">ISMC <span class="text-blue-600 font-light">PRO</span></h1>
             </div>
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">Oggi: <span id="current-date" class="text-blue-600 font-black"></span></div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-widest bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
+                Oggi: <span id="current-date" class="text-blue-600 font-black"></span>
+            </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto py-10 px-6">
+        
         <div class="mb-12">
-            <h2 class="text-3xl font-black text-slate-900 mb-6 tracking-tight">Prossime Scadenze</h2>
+            <h2 class="text-3xl font-black text-slate-900 mb-6 tracking-tight flex items-center gap-3">
+                <i class="fas fa-bolt text-amber-500"></i> Prossime Scadenze
+            </h2>
             <div id="featured-cards" class="grid md:grid-cols-3 gap-6"></div>
         </div>
 
-        <div class="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden p-8">
-            <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight italic text-center md:text-left">Registro Adempimenti Completo (46/46)</h3>
+        <div class="mb-8 p-6 bg-white rounded-3xl shadow-sm border border-slate-200">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Filtra per Categoria</h3>
+            <div class="flex flex-wrap gap-3">
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition active" onclick="filterTable('')">Tutte le Scadenze</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Lombardia')">Lombardia</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Inclusione')">Inclusione</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Fiscale')">Fiscale</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Parità')">Parità</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Valutazione')">Invalsi</button>
+                <button class="filter-btn bg-slate-50 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 transition uppercase tracking-tighter" onclick="filterTable('Variazioni')">Su Evento</button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden p-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b border-slate-50 pb-6">
+                <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tighter italic">Registro Integrale</h3>
+                <div class="relative w-full md:w-80">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="customSearch" placeholder="Cerca parola chiave..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-sm outline-none focus:ring-4 focus:ring-blue-100 transition">
+                </div>
+            </div>
             <table id="fullTable" class="w-full text-left display">
                 <thead>
                     <tr>
                         <th class="hidden">Ordine</th>
-                        <th>Scadenza</th>
+                        <th>Periodo</th>
                         <th>Area</th>
                         <th>Adempimento</th>
                         <th>Ambito</th>
@@ -53,10 +78,10 @@
     </main>
 
     <div id="modal">
-        <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden p-2 border border-white/20">
-            <div class="bg-slate-900 p-8 rounded-[2rem] text-white shadow-2xl">
+        <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20">
+            <div class="bg-slate-900 p-8 text-white">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="bg-blue-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Nota Operativa</span>
+                    <span class="bg-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Dettaglio Nota Operativa</span>
                     <button onclick="closeModal()" class="text-slate-400 hover:text-white transition"><i class="fas fa-times-circle fa-xl"></i></button>
                 </div>
                 <h3 id="modal-title" class="text-2xl font-black mb-4 leading-tight"></h3>
@@ -74,24 +99,23 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-        // DATABASE INTEGRALE - TUTTE LE 46 VOCI
         const database = [
-            { id: 1, o: 930, a: "Parità", t: "Rilevazione funzionamento e docenti", p: "30 settembre", m: 9, g: 30, n: "Compilazione annuale SIDI per mantenimento requisiti parità e dati docenti.", am: "Tutte le scuole" },
-            { id: 2, o: 1115, a: "Parità", t: "Anagrafe Nazionale Studenti", p: "Settembre/novembre", m: 11, g: 15, n: "Di norma tra metà settembre e metà novembre; aggiornare anche in caso di ingressi/ritiri/trasferimenti.", am: "Tutte le scuole" },
-            { id: 3, o: 1031, a: "Offerta formativa", t: "Approvazione PTOF", p: "31 ottobre", m: 10, g: 31, n: "Il PTOF può essere rivisto annualmente entro il 31 ottobre; spesso prorogato.", am: "Tutte le scuole" },
-            { id: 4, o: 1031, a: "Inclusione", t: "Approvazione PEI", p: "31 ottobre", m: 10, g: 31, n: "Il PEI definitivo è di norma redatto non oltre ottobre; in casi motivati è possibile deroga.", am: "Scuole con disabilità" },
-            { id: 5, o: 1215, a: "Inclusione", t: "Piattaforma USRL disabilità", p: "Ottobre/dicembre", m: 12, g: 15, n: "Rilevazione annuale su piattaforma USR Lombardia.", am: "Lombardia" },
+            { id: 1, o: 930, a: "Parità scolastica", t: "Rilevazione funzionamento e docenti", p: "30 settembre", m: 9, g: 30, n: "Compilazione annuale SIDI per mantenimento requisiti parità e dati docenti.", am: "Tutte le scuole" },
+            { id: 2, o: 1115, a: "Parità scolastica", t: "Anagrafe Nazionale Studenti", p: "Settembre/novembre", m: 11, g: 15, n: "Inserimento e aggiornamento in ANS (metà sett-metà nov).", am: "Tutte le scuole" },
+            { id: 3, o: 1031, a: "Offerta formativa", t: "Approvazione PTOF", p: "31 ottobre", m: 10, g: 31, n: "Revisione annuale entro il 31 ottobre.", am: "Tutte le scuole" },
+            { id: 4, o: 1031, a: "Inclusione", t: "Approvazione PEI", p: "31 ottobre", m: 10, g: 31, n: "Redazione PEI definitivo non oltre ottobre.", am: "Scuole con disabilità" },
+            { id: 5, o: 1215, a: "Inclusione (Lombardia)", t: "USR: piattaforma disabilità", p: "Ottobre/dicembre", m: 12, g: 15, n: "Rilevazione annuale su piattaforma USR Lombardia.", am: "Lombardia" },
             { id: 6, o: 1115, a: "Valutazione", t: "Iscrizione Prove INVALSI", p: "Novembre", m: 11, g: 15, n: "Iscrizione degli alunni alle prove INVALSI.", am: "Classi interessate" },
             { id: 7, o: 1215, a: "Valutazione", t: "INVALSI: classi campione", p: "Dicembre", m: 12, g: 15, n: "Individuazione classi campione per lo svolgimento prove.", am: "Classi interessate" },
             { id: 8, o: 115, a: "Valutazione", t: "INVALSI: informazioni contesto", p: "Gennaio", m: 1, g: 15, n: "Inserimento informazioni di contesto richieste da INVALSI.", am: "Classi interessate" },
             { id: 9, o: 515, a: "Valutazione", t: "INVALSI: svolgimento prove", p: "Marzo/maggio", m: 5, g: 15, n: "Finestra ordinaria di svolgimento prove.", am: "Classi interessate" },
-            { id: 10, o: 115, a: "Rilevazioni", t: "Dati Generali – Scuole statali e non", p: "Novembre/gennaio", m: 1, g: 15, n: "Rilevazione ex Integrative; di norma da metà novembre a metà gennaio.", am: "Tutte le scuole" },
+            { id: 10, o: 115, a: "Rilevazioni", t: "Dati Generali ex Integrative", p: "Novembre/gennaio", m: 1, g: 15, n: "Rilevazione SIDI da metà novembre a metà gennaio.", am: "Tutte le scuole" },
             { id: 11, o: 215, a: "Iscrizioni", t: "Iscrizioni classi prime", p: "Gennaio/febbraio", m: 2, g: 15, n: "Caricamento su SIDI secondo circolare annuale.", am: "Tutte le scuole" },
             { id: 12, o: 228, a: "Contributi", t: "Modello A", p: "Febbraio", m: 2, g: 28, n: "Caricamento su SIDI dopo pubblicazione CMS e note USR.", am: "Scuole paritarie" },
             { id: 13, o: 315, a: "Contributi", t: "Sezioni primavera", p: "Febbraio/marzo", m: 3, g: 15, n: "Domanda distinta per ciascuna sezione.", am: "Sezioni primavera" },
             { id: 14, o: 310, a: "Sanitario", t: "Vaccini: invio elenchi ASL", p: "10 marzo", m: 3, g: 10, n: "Invio elenco iscritti fino a 16 anni alle ASL.", am: "Scuole fino a 16 anni" },
-            { id: 15, o: 316, a: "Fiscale", t: "Spese scolastiche Agenzia Entrate", p: "16 marzo", m: 3, g: 16, n: "Invio dati spese scolastiche ed erogazioni liberali per precompilata.", am: "Tutte le scuole" },
-            { id: 16, o: 316, a: "Fiscale", t: "Erogazioni liberali (ETS/ONLUS)", p: "16 marzo", m: 3, g: 16, n: "Per enti del terzo settore con entrate > 220.000 euro.", am: "Soggetti obbligati" },
+            { id: 15, o: 316, a: "Fiscale", t: "Spese scolastiche AdE", p: "16 marzo", m: 3, g: 16, n: "Invio dati per precompilata Agenzia Entrate.", am: "Tutte le scuole" },
+            { id: 16, o: 316, a: "Fiscale", t: "Erogazioni liberali (ETS/ONLUS)", p: "16 marzo", m: 3, g: 16, n: "Per enti terzo settore con entrate > 220.000 euro.", am: "Soggetti obbligati" },
             { id: 17, o: 331, a: "Parità", t: "Richiesta nuova parità", p: "31 marzo", m: 3, g: 31, n: "Istanza entro il 31/3 per l'a.s. successivo.", am: "Nuove richieste" },
             { id: 18, o: 331, a: "Parità", t: "Estensione parità nuovi corsi", p: "31 marzo", m: 3, g: 31, n: "Entro 30 giorni dal termine ultimo per le iscrizioni.", am: "Scuole paritarie" },
             { id: 19, o: 331, a: "Primaria", t: "Nuovo convenzionamento primaria", p: "31 marzo", m: 3, g: 31, n: "Domanda da inoltrare all'USR o AT.", am: "Primaria" },
@@ -107,22 +131,24 @@
             { id: 29, o: 630, a: "Trasparenza", t: "Sussidi e contributi PA", p: "30 giugno", m: 6, g: 30, n: "Pubblicazione contributi ricevuti anno precedente sul sito.", am: "Soggetti obbligati" },
             { id: 30, o: 630, a: "Inclusione", t: "Piano inclusione (PAI)", p: "30 giugno", m: 6, g: 30, n: "Aggiornamento strategie inclusive entro giugno.", am: "Tutte le scuole" },
             { id: 31, o: 710, a: "Organizzazione", t: "Aumento classi: infanzia", p: "10 luglio", m: 7, g: 10, n: "Istanza sdoppiamento classi/sezioni infanzia.", am: "USR" },
-            { id: 32, o: 720, a: "Organizzazione", t: "Aumento classi: intermedie", p: "20 luglio", m: 7, g: 20, n: "Esempio USRL: entro 20 luglio.", am: "USR" },
-            { id: 33, o: 731, a: "Organizzazione", t: "Aumento classi: terminali", p: "31 luglio", m: 7, g: 31, n: "Esempio USRL: entro 31 luglio.", am: "USR" },
+            { id: 32, o: 720, a: "Organizzazione", t: "Aumento classi: intermedie", p: "20 luglio", m: 7, g: 20, n: "Entro 20 luglio; verificare sempre il proprio USR/AT.", am: "USR" },
+            { id: 33, o: 731, a: "Organizzazione", t: "Aumento classi: terminali", p: "31 luglio", m: 7, g: 31, n: "Entro 31 luglio; verificare sempre il proprio USR/AT.", am: "USR" },
             { id: 34, o: 720, a: "Organizzazione", t: "Sospensione classe", p: "20 luglio", m: 7, g: 20, n: "Entro 20 luglio o avvio a.s. per motivi gravi.", am: "USR" },
             { id: 35, o: 9999, a: "Variazioni", t: "Legale Rappresentante", p: "Su evento", m: 13, g: 1, n: "Comunicazione tempestiva SIDI e USR.", am: "Gestione" },
             { id: 36, o: 9999, a: "Variazioni", t: "Coordinatore Didattico", p: "Su evento", m: 13, g: 1, n: "Comunicazione tempestiva SIDI e USR.", am: "Didattica" },
             { id: 37, o: 9999, a: "Variazioni", t: "Cambio gestione / natura giuridica", p: "Su evento", m: 13, g: 1, n: "Comunicazione tempestiva (max 60 gg in USRL).", am: "Gestione" },
             { id: 38, o: 9999, a: "Variazioni", t: "Trasferimento sede", p: "Preventivamente", m: 13, g: 1, n: "Richiesta preventiva con verifica idoneità locali.", am: "Gestione" },
             { id: 39, o: 9999, a: "Variazioni", t: "Modifica edificio", p: "Inizio lavori", m: 13, g: 1, n: "Comunicazione contestuale all'inizio lavori.", am: "Sedi" },
-            { id: 40, o: 9999, a: "Variazioni", t: "Coordinate bancarie / Alunni", p: "Su evento", m: 13, g: 1, n: "Notifica tempestiva agli Ambiti Territoriali.", am: "Segreteria" },
-            { id: 41, o: 1015, a: "Regione", t: "Dote merito", p: "Settembre/ottobre", m: 10, g: 15, n: "Bando regionale Lombardia Dote Merito.", am: "Lombardia" },
-            { id: 42, o: 1215, a: "Regione", t: "Buono scuola", p: "Novembre/dicembre", m: 12, g: 15, n: "Bando regionale Lombardia Buono Scuola.", am: "Lombardia" },
-            { id: 43, o: 430, a: "Regione", t: "Contributo scuole infanzia", p: "Febbraio/aprile", m: 4, g: 30, n: "Finestra regionale dedicata ai contributi scuole infanzia.", am: "Lombardia" },
-            { id: 44, o: 715, a: "Regione", t: "Dote disabilità (Dote H)", p: "Giugno/luglio", m: 7, g: 15, n: "Finestra regionale dote disabilità.", am: "Lombardia" },
+            { id: 40, o: 9999, a: "Variazioni", t: "Coordinate bancarie", p: "Su evento", m: 13, g: 1, n: "Notifica tempestiva agli Ambiti Territoriali.", am: "Segreteria" },
+            { id: 41, o: 1015, a: "Regione (Lombardia)", t: "Dote merito", p: "Settembre/ottobre", m: 10, g: 15, n: "Bando regionale Lombardia Dote Merito.", am: "Lombardia" },
+            { id: 42, o: 1215, a: "Regione (Lombardia)", t: "Buono scuola", p: "Novembre/dicembre", m: 12, g: 15, n: "Bando regionale Lombardia Buono Scuola.", am: "Lombardia" },
+            { id: 43, o: 430, a: "Regione (Lombardia)", t: "Contributo scuole infanzia", p: "Febbraio/aprile", m: 4, g: 30, n: "Finestra regionale dedicata ai contributi scuole infanzia.", am: "Lombardia" },
+            { id: 44, o: 715, a: "Regione (Lombardia)", t: "Dote disabilità (Dote H)", p: "Giugno/luglio", m: 7, g: 15, n: "Finestra regionale dote disabilità.", am: "Lombardia" },
             { id: 45, o: 710, a: "Sanitario", t: "Vaccini: raccolta doc. famiglie", p: "10 luglio", m: 7, g: 10, n: "Invito famiglie a depositare documentazione vaccinale.", am: "Famiglie" },
             { id: 46, o: 720, a: "Sanitario", t: "Vaccini: comunicazione ASL", p: "20 luglio", m: 7, g: 20, n: "Trasmissione alle ASL mancato deposito certificati.", am: "USR" }
         ];
+
+        let table;
 
         function showDetail(id) {
             const item = database.find(x => x.id === id);
@@ -136,13 +162,19 @@
         }
         function closeModal() { $('#modal').removeClass('active'); }
 
+        function filterTable(category) {
+            table.search(category).draw();
+            $('.filter-btn').removeClass('active');
+            event.currentTarget.classList.add('active');
+        }
+
         $(document).ready(function() {
             const oggi = new Date();
             const meseOggi = oggi.getMonth() + 1;
             const giornoOggi = oggi.getDate();
             $('#current-date').text(oggi.toLocaleDateString('it-IT', {day:'numeric', month:'long', year:'numeric'}));
 
-            // LOGICA DASHBOARD: Trova le 3 più vicine da OGGI in poi
+            // Dashboard logica data reale (Prossime 3 scadenze da oggi)
             const imminenti = database
                 .filter(x => (x.m > meseOggi) || (x.m === meseOggi && x.g >= giornoOggi))
                 .sort((a,b) => {
@@ -153,29 +185,37 @@
 
             let cardsHtml = '';
             imminenti.forEach(s => {
-                cardsHtml += `<div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition" onclick="showDetail(${s.id})">
-                    <div class="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-clock"></i></div>
+                cardsHtml += `<div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:-translate-y-2 transition-all duration-300" onclick="showDetail(${s.id})">
+                    <div class="h-10 w-10 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4"><i class="fas fa-calendar-check"></i></div>
                     <h4 class="font-bold text-slate-800 mb-2 leading-tight">${s.t}</h4>
                     <span class="text-blue-600 font-black text-[10px] uppercase tracking-tighter bg-blue-50 px-2 py-1 rounded-md">${s.p}</span>
                 </div>`;
             });
             $('#featured-cards').html(cardsHtml || '<p class="text-slate-400">Nessuna scadenza imminente.</p>');
 
-            // TABELLA GENERALE
             let tableHtml = '';
             database.forEach(s => {
                 tableHtml += `<tr class="clickable-row" onclick="showDetail(${s.id})">
                     <td class="hidden">${s.o}</td>
                     <td class="p-4 font-bold text-blue-900 border-b border-slate-50 text-sm">${s.p}</td>
-                    <td class="p-4 text-[10px] font-bold text-slate-400 border-b border-slate-50 uppercase">${s.a}</td>
+                    <td class="p-4 text-[10px] font-bold text-slate-400 border-b border-slate-50 uppercase tracking-tighter">${s.a}</td>
                     <td class="p-4 font-bold border-b border-slate-50 text-sm">${s.t}</td>
-                    <td class="p-4 text-slate-500 italic border-b border-slate-50 text-xs">${s.am}</td>
+                    <td class="p-4 text-slate-500 italic border-b border-slate-50 text-xs">Vedi dettagli</td>
                 </tr>`;
             });
             $('#table-body').html(tableHtml);
 
-            $('#fullTable').DataTable({ pageLength: 50, order: [[0, 'asc']], language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it-IT.json' } });
+            table = $('#fullTable').DataTable({ 
+                pageLength: 50, 
+                order: [[0, 'asc']], 
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it-IT.json' } 
+            });
+
+            $('#customSearch').on('keyup', function() {
+                table.search(this.value).draw();
+            });
         });
+
         $('#modal').click(function(e) { if(e.target === this) closeModal(); });
     </script>
 </body>
